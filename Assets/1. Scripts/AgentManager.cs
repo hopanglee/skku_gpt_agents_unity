@@ -1,5 +1,12 @@
 using System.Collections.Generic;
 
+public enum AgentName
+{
+    None,
+    Adam,
+    Eve,
+}
+
 public static class AgentManager
 {
     // Dictionary 초기화

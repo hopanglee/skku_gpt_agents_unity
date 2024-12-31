@@ -1,57 +1,88 @@
+using Pathfinding;
 using UnityEngine;
 
-[RequireComponent(typeof(MoveController))]
+[RequireComponent(typeof(FollowerEntity))]
 public class Agent : MonoBehaviour
 {
-    public TerrianManager.Location Area;
-    public string state;
+    [SerializeField]
+    private AgentName agentName = AgentName.None;
+
+    private int id;
+    public TerrainManager.Location Area;
 
     [SerializeField]
-    private int id;
+    private string state;
     private MoveController m_moveController;
-    private CommandManager m_commandManager;
+    private CommandInvoker m_commandInvoker;
 
     void Awake()
     {
-        m_moveController = new MoveController();
-        m_commandManager = new CommandManager();
+        m_moveController = new MoveController(GetComponent<FollowerEntity>());
+        m_commandInvoker = new CommandInvoker();
 
         // AgentManager에 에이전트 추가
-        if (id != 0) // ID가 0인지 확인 (0은 기본값)
+        if (agentName != AgentName.None) // ID가 0인지 확인 (0은 기본값)
         {
+            id = (int)agentName;
             AgentManager.AddAgent(id, this);
         }
         else
         {
             Debug.LogError("Agent ID is not set! Please assign a unique ID in the Inspector.");
         }
+
+        //SetAreaInit();
+    }
+
+    private void Start()
+    {
+        // TEST
+        m_commandInvoker.EnqueueCommand(
+            new MoveCommand(m_moveController, TerrainManager.Location.River)
+        );
+        m_commandInvoker.ExcuteNextCommand();
+    }
+
+    private void SetAreaInit()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2);
+
+        foreach (var other in colliders)
+        {
+            if (other.CompareTag("Area"))
+            {
+                Debug.Log($"Already in Area: {other.name}");
+                var Area = other.GetComponent<LocationArea>();
+                this.Area = Area.location;
+                Area.OnEventInvoked += OnEventListener;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Area")
+        if (other.CompareTag("Area"))
         {
             var Area = other.GetComponent<LocationArea>();
             this.Area = Area.location;
             Area.OnEventInvoked += OnEventListener;
+            Debug.Log($"Area Enter : {Area.name}");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Area")
+        if (other.CompareTag("Area"))
         {
             var Area = other.GetComponent<LocationArea>();
             Area.OnEventInvoked -= OnEventListener;
+            Debug.Log($"Area Exit : {Area.name}");
         }
     }
 
     private void OnEventListener() { }
 
-    void OnEnable()
-    {
-        //EventManager.
-    }
+    void OnEnable() { }
 
     void OnDisable() { }
 }

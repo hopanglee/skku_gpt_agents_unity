@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CommandManager
+public class CommandInvoker
 {
     private Queue<ICommand> m_commandQueue = new();
 

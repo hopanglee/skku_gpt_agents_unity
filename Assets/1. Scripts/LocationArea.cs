@@ -3,6 +3,6 @@ using UnityEngine;
 
 public class LocationArea : MonoBehaviour
 {
-    public TerrianManager.Location location;
+    public TerrainManager.Location location;
     public event Action OnEventInvoked;
 }
