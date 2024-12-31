@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
-public class TerrainManager : MonoBehaviour
+public static class TerrainManager
 {
-    public static TerrainManager Instance { get; set; }
-
     public enum Location
     {
         AdamHome,
@@ -21,39 +19,24 @@ public class TerrainManager : MonoBehaviour
         public Transform transform;
     }
 
-    [SerializeField]
-    private List<LocationPos> locationPosList = new();
-    private Dictionary<Location, Transform> locationDic;
+    private static Dictionary<Location, Transform> locationDic = new();
 
-    private void Awake()
+    public static void AddLocation(Location location, Transform transform)
     {
-        Instance = this;
-
-        // 리스트를 딕셔너리로 변환
-        ConvertListToDictionary();
-    }
-
-    private void ConvertListToDictionary()
-    {
-        locationDic = new Dictionary<Location, Transform>();
-
-        foreach (var locationPos in locationPosList)
+        if (!locationDic.ContainsKey(location))
         {
-            if (!locationDic.ContainsKey(locationPos.loc))
-            {
-                locationDic.Add(locationPos.loc, locationPos.transform);
-            }
-            else
-            {
-                Debug.LogWarning(
-                    $"Duplicate Location Key Found: {locationPos.loc}. Ignoring this entry."
-                );
-            }
+            locationDic.Add(location, transform);
         }
     }
 
-    public Vector3 GetLocationVector(Location location)
+    public static Vector3 GetLocationVector(Location location)
     {
-        return locationDic[location].position;
+        if (locationDic.ContainsKey(location))
+            return locationDic[location].position;
+        else
+        {
+            Debug.LogError("Location Dictionary have not the key.");
+            return Vector3.zero;
+        }
     }
 }

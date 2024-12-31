@@ -19,7 +19,7 @@ public class ChangeStateCommand : ICommand
     public void Execute()
     {
         OnStart?.Invoke();
-
+        m_agent.SetState(new_state);
         OnEnd?.Invoke();
     }
 }

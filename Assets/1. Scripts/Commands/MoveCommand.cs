@@ -20,7 +20,7 @@ public class MoveCommand : ICommand
     {
         OnStart?.Invoke();
 
-        m_moveController.SetTarget(TerrainManager.Instance.GetLocationVector(m_area));
+        m_moveController.SetTarget(TerrainManager.GetLocationVector(m_area));
 
         OnEnd?.Invoke();
     }

@@ -937,6 +937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   location: 3
+  position: {fileID: 899217397}
 --- !u!65 &469806098
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1134,6 +1135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   location: 0
+  position: {fileID: 1864419471}
 --- !u!1 &729628128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,6 +1185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   location: 1
+  position: {fileID: 1381574646}
 --- !u!65 &729628131
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1741,59 +1744,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 729628129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1466655795
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1466655797}
-  - component: {fileID: 1466655796}
-  m_Layer: 0
-  m_Name: TerrainManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1466655796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466655795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de66c036ac6fe4f05bdd0828cd4ddc42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  locationPosList:
-  - loc: 0
-    transform: {fileID: 1864419471}
-  - loc: 3
-    transform: {fileID: 899217397}
-  - loc: 1
-    transform: {fileID: 1381574646}
-  - loc: 2
-    transform: {fileID: 289870567}
---- !u!4 &1466655797
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466655795}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.26801, y: 3.0227134, z: -2.224382}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1525359588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,6 +1793,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   location: 2
+  position: {fileID: 289870567}
 --- !u!65 &1525359591
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2487,4 +2438,3 @@ SceneRoots:
   - {fileID: 4573921932495946494}
   - {fileID: 1136416529}
   - {fileID: 845179081}
-  - {fileID: 1466655797}

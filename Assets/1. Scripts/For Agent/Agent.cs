@@ -59,6 +59,11 @@ public class Agent : MonoBehaviour
         }
     }
 
+    public void SetState(string new_state)
+    {
+        this.state = new_state;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Area"))
