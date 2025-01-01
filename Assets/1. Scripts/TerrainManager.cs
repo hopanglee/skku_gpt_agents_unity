@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
+using Unity.Profiling;
 using UnityEngine;
 
 public static class TerrainManager
 {
-    public enum Location
+    public enum LocationTag
     {
         AdamHome,
         Park,
@@ -12,27 +13,26 @@ public static class TerrainManager
         EveHouse,
     }
 
-    [System.Serializable]
-    public struct LocationPos
+    public struct LocationInfo
     {
-        public Location loc;
+        public LocationArea area;
         public Transform transform;
     }
 
-    private static Dictionary<Location, Transform> locationDic = new();
+    private static Dictionary<LocationTag, LocationInfo> locationDic = new();
 
-    public static void AddLocation(Location location, Transform transform)
+    public static void AddLocation(LocationTag location, LocationInfo locInfo)
     {
         if (!locationDic.ContainsKey(location))
         {
-            locationDic.Add(location, transform);
+            locationDic.Add(location, locInfo);
         }
     }
 
-    public static Vector3 GetLocationVector(Location location)
+    public static Vector3 LocationToVector(LocationTag location)
     {
         if (locationDic.ContainsKey(location))
-            return locationDic[location].position;
+            return locationDic[location].transform.position;
         else
         {
             Debug.LogError("Location Dictionary have not the key.");
@@ -40,10 +40,21 @@ public static class TerrainManager
         }
     }
 
-    public static Transform GetLocationTransform(Location location)
+    public static Transform LocationToTransform(LocationTag location)
     {
         if (locationDic.ContainsKey(location))
-            return locationDic[location];
+            return locationDic[location].transform;
+        else
+        {
+            Debug.LogError("Location Dictionary have not the key.");
+            return null;
+        }
+    }
+
+    public static LocationArea LocationToArea(LocationTag location)
+    {
+        if (locationDic.ContainsKey(location))
+            return locationDic[location].area;
         else
         {
             Debug.LogError("Location Dictionary have not the key.");

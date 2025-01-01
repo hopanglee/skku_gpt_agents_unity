@@ -93,5 +93,7 @@ public class MoveController : MonoBehaviour
             StopCoroutine(CheckArrival());
             isMoving = false;
         }
+
+        OnReached = null;
     }
 }

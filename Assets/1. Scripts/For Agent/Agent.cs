@@ -7,16 +7,14 @@ public class Agent : MonoBehaviour
     private AgentName agentName = AgentName.None;
 
     private int id;
-    public TerrainManager.Location Area;
+    public TerrainManager.LocationTag Area;
 
     [SerializeField]
     private string state;
-    private MoveController m_moveController;
     private CommandInvoker m_commandInvoker;
 
     void Awake()
     {
-        m_moveController = GetComponent<MoveController>();
         m_commandInvoker = new CommandInvoker();
 
         // AgentManager에 에이전트 추가
@@ -38,29 +36,14 @@ public class Agent : MonoBehaviour
         // TEST
         m_commandInvoker.EnqueueCommand(
             new MoveCommand(
-                m_moveController,
-                TerrainManager.Location.River,
+                this,
+                TerrainManager.LocationTag.River,
                 null,
-                () => Debug.Log("Movecommand OnEND()")
+                m_commandInvoker.ExcuteNextCommand
             )
         );
+        m_commandInvoker.EnqueueCommand(new SpeakCommand(this, "I Speak!"));
         m_commandInvoker.ExcuteNextCommand();
-    }
-
-    private void SetAreaInit()
-    {
-        Collider[] colliders = Physics.OverlapBox(transform.position, transform.localScale / 2);
-
-        foreach (var other in colliders)
-        {
-            if (other.CompareTag("Area"))
-            {
-                Debug.Log($"Already in Area: {other.name}");
-                var Area = other.GetComponent<LocationArea>();
-                this.Area = Area.location;
-                Area.OnEventInvoked += OnEventListener;
-            }
-        }
     }
 
     public void SetState(string new_state)
@@ -74,7 +57,7 @@ public class Agent : MonoBehaviour
         {
             var Area = other.GetComponent<LocationArea>();
             this.Area = Area.location;
-            Area.OnEventInvoked += OnEventListener;
+            Area.Enter(this);
             Debug.Log($"Area Enter : {Area.name}");
         }
     }
@@ -84,12 +67,15 @@ public class Agent : MonoBehaviour
         if (other.CompareTag("Area"))
         {
             var Area = other.GetComponent<LocationArea>();
-            Area.OnEventInvoked -= OnEventListener;
+            Area.Exit(this);
             Debug.Log($"Area Exit : {Area.name}");
         }
     }
 
-    private void OnEventListener() { }
+    public void OnEventListener(string str)
+    {
+        Debug.Log($"{agentName} hear {str}");
+    }
 
     void OnEnable() { }
 

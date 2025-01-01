@@ -16,6 +16,7 @@ public class CommandInvoker
         if (m_commandQueue.Count > 0)
         {
             ICommand command = m_commandQueue.Dequeue();
+            Debug.Log($"{command.GetType()} Excuted.");
             command.Execute();
         }
     }
