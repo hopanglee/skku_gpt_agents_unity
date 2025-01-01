@@ -39,4 +39,15 @@ public static class TerrainManager
             return Vector3.zero;
         }
     }
+
+    public static Transform GetLocationTransform(Location location)
+    {
+        if (locationDic.ContainsKey(location))
+            return locationDic[location];
+        else
+        {
+            Debug.LogError("Location Dictionary have not the key.");
+            return null;
+        }
+    }
 }

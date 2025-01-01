@@ -1,7 +1,6 @@
 using Pathfinding;
 using UnityEngine;
 
-[RequireComponent(typeof(FollowerEntity))]
 public class Agent : MonoBehaviour
 {
     [SerializeField]
@@ -17,7 +16,7 @@ public class Agent : MonoBehaviour
 
     void Awake()
     {
-        m_moveController = new MoveController(GetComponent<FollowerEntity>());
+        m_moveController = GetComponent<MoveController>();
         m_commandInvoker = new CommandInvoker();
 
         // AgentManager에 에이전트 추가
@@ -38,7 +37,12 @@ public class Agent : MonoBehaviour
     {
         // TEST
         m_commandInvoker.EnqueueCommand(
-            new MoveCommand(m_moveController, TerrainManager.Location.River)
+            new MoveCommand(
+                m_moveController,
+                TerrainManager.Location.River,
+                null,
+                () => Debug.Log("Movecommand OnEND()")
+            )
         );
         m_commandInvoker.ExcuteNextCommand();
     }
