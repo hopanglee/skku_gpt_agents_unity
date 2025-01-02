@@ -45,13 +45,17 @@ public class MoveController : MonoBehaviour
     private IEnumerator CheckArrival()
     {
         isMoving = true;
+
         if (followerEntity == null)
             Debug.LogError("FollowerEntity is NULL");
+
+        yield return null;
 
         while (!followerEntity.reachedEndOfPath)
         {
             yield return null; // 프레임 대기
         }
+
         isMoving = false;
         OnReachTarget();
     }
@@ -59,8 +63,10 @@ public class MoveController : MonoBehaviour
     private void OnReachTarget()
     {
         Debug.Log($"{gameObject.name} REACH!!");
-        OnReached?.Invoke();
         Reset();
+        OnReached?.Invoke();
+
+        //OnReached = null;
     }
 
     public void Pause()
@@ -93,7 +99,5 @@ public class MoveController : MonoBehaviour
             StopCoroutine(CheckArrival());
             isMoving = false;
         }
-
-        OnReached = null;
     }
 }

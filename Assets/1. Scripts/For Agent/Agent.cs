@@ -11,11 +11,11 @@ public class Agent : MonoBehaviour
 
     [SerializeField]
     private string state;
-    private CommandInvoker m_commandInvoker;
+    private CommandManager m_commandManager;
 
     void Awake()
     {
-        m_commandInvoker = new CommandInvoker();
+        m_commandManager = new CommandManager(this);
 
         // AgentManager에 에이전트 추가
         if (agentName != AgentName.None) // ID가 0인지 확인 (0은 기본값)
@@ -27,23 +27,18 @@ public class Agent : MonoBehaviour
         {
             Debug.LogError("Agent ID is not set! Please assign a unique ID in the Inspector.");
         }
-
-        //SetAreaInit();
     }
 
     private void Start()
     {
         // TEST
-        m_commandInvoker.EnqueueCommand(
-            new MoveCommand(
-                this,
-                TerrainManager.LocationTag.River,
-                null,
-                m_commandInvoker.ExcuteNextCommand
-            )
-        );
-        m_commandInvoker.EnqueueCommand(new SpeakCommand(this, "I Speak!"));
-        m_commandInvoker.ExcuteNextCommand();
+        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.River);
+        m_commandManager.AddSpeakCommand("Hello");
+        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.EveHouse);
+        m_commandManager.AddSpeakCommand("Bye");
+        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.AdamHouse);
+        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.EveHouse);
+        m_commandManager.Execute();
     }
 
     public void SetState(string new_state)
