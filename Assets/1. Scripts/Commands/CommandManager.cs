@@ -13,15 +13,29 @@ public class CommandManager
         m_commandInvoker = new CommandInvoker();
     }
 
-    public void AddMoveCommand(TerrainManager.LocationTag location)
+    public void AddMoveCommand(Transform target)
     {
-        var command = CreateMoveCommand(location);
+        var command = CreateMoveCommand(target);
         m_commandInvoker.EnqueueCommand(command);
     }
 
-    public void AddSpeakCommand(string str)
+    public void AddMoveToLocationCommand(TerrainManager.LocationTag location)
     {
-        var command = CreateSpeakCommand(str);
+        var locationTr = TerrainManager.LocationToTransform(location);
+        var command = CreateMoveCommand(locationTr);
+        m_commandInvoker.EnqueueCommand(command);
+    }
+
+    public void AddChaseCommand(AgentName agentName)
+    {
+        var agentTr = AgentManager.GetAgentByName(agentName).transform;
+        var command = CreateMoveCommand(agentTr);
+        m_commandInvoker.EnqueueCommand(command);
+    }
+
+    public void AddSpeakCommand(string str, float volume)
+    {
+        var command = CreateSpeakCommand(str, volume);
         m_commandInvoker.EnqueueCommand(command);
     }
 
@@ -31,17 +45,17 @@ public class CommandManager
         m_commandInvoker.EnqueueCommand(command);
     }
 
-    private MoveCommand CreateMoveCommand(TerrainManager.LocationTag location)
+    private MoveCommand CreateMoveCommand(Transform target)
     {
-        var command = new MoveCommand(m_agent, location);
+        var command = new MoveCommand(m_agent, target);
         command.OnEnd += m_commandInvoker.ExcuteNextCommand;
 
         return command;
     }
 
-    private SpeakCommand CreateSpeakCommand(string str)
+    private SpeakCommand CreateSpeakCommand(string str, float volume)
     {
-        var command = new SpeakCommand(m_agent, str);
+        var command = new SpeakCommand(m_agent, str, volume);
         command.OnEnd += m_commandInvoker.ExcuteNextCommand;
         return command;
     }

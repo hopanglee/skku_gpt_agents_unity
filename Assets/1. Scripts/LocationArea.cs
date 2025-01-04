@@ -34,4 +34,15 @@ public class LocationArea : MonoBehaviour
     {
         return agents;
     }
+
+    public void MsgMediator(Agent sender, string str, float m_volume)
+    {
+        foreach (var _agent in agents)
+        {
+            if (_agent != sender && sender.Distance(_agent) <= m_volume)
+            {
+                _agent.OnEventListener(sender, str);
+            }
+        }
+    }
 }

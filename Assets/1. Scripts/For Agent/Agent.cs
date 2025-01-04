@@ -32,12 +32,12 @@ public class Agent : MonoBehaviour
     private void Start()
     {
         // TEST
-        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.River);
-        m_commandManager.AddSpeakCommand("Hello");
-        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.EveHouse);
-        m_commandManager.AddSpeakCommand("Bye");
-        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.AdamHouse);
-        m_commandManager.AddMoveCommand(TerrainManager.LocationTag.EveHouse);
+        if (agentName == AgentName.Adam)
+            m_commandManager.AddChaseCommand(AgentName.Eve);
+        else
+            m_commandManager.AddMoveToLocationCommand(TerrainManager.LocationTag.AdamHouse);
+        m_commandManager.AddSpeakCommand("Hello", 10f);
+
         m_commandManager.Execute();
     }
 
@@ -67,12 +67,17 @@ public class Agent : MonoBehaviour
         }
     }
 
-    public void OnEventListener(string str)
+    public void OnEventListener(Agent sender, string str)
     {
-        Debug.Log($"{agentName} hear {str}");
+        Debug.Log($"{agentName}) {sender.name} : {str}");
     }
 
     void OnEnable() { }
 
     void OnDisable() { }
+
+    public float Distance(Agent agent)
+    {
+        return Vector3.Distance(this.transform.position, agent.transform.position);
+    }
 }

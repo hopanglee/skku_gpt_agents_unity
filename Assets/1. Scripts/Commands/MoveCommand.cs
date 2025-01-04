@@ -9,17 +9,17 @@ public class MoveCommand : ICommand
     public bool isExecuting = false;
 
     private MoveController m_moveController;
-    private TerrainManager.LocationTag m_area;
+    private Transform m_target;
 
     public MoveCommand(
         Agent agent,
-        TerrainManager.LocationTag area,
+        Transform target,
         Action startAction = null,
         Action endAction = null
     )
     {
         this.m_moveController = agent.GetComponent<MoveController>();
-        this.m_area = area;
+        this.m_target = target;
 
         OnStart += startAction;
         OnEnd += endAction;
@@ -32,7 +32,7 @@ public class MoveCommand : ICommand
 
         m_moveController.Reset();
         m_moveController.OnReached += WhenReached;
-        m_moveController.SetTarget(TerrainManager.LocationToTransform(m_area));
+        m_moveController.SetTarget(m_target);
     }
 
     public void WhenReached()
