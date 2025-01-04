@@ -26,6 +26,23 @@ public class CommandManager
         m_commandInvoker.EnqueueCommand(command);
     }
 
+    public void AddMoveToObjectCommand(BaseObject.ObjectTag objectTag)
+    {
+        //var locationTr = TerrainManager.LocationToTransform(null);
+        var objTr = TerrainManager
+            .LocationToArea(m_agent.Area)
+            ?.GetBaseObject(objectTag)
+            ?.GetTransform();
+        //Debug.Log($"{objTr.position}");
+        if (objTr == null)
+        {
+            return;
+        }
+
+        var command = CreateMoveCommand(objTr);
+        m_commandInvoker.EnqueueCommand(command);
+    }
+
     public void AddChaseCommand(AgentName agentName)
     {
         var agentTr = AgentManager.GetAgentByName(agentName).transform;

@@ -1,19 +1,19 @@
 using Pathfinding;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Agent : MonoBehaviour
+public class Agent : PositionableObject, IStateGetable
 {
     [SerializeField]
     private AgentName agentName = AgentName.None;
 
     private int id;
-    public TerrainManager.LocationTag Area;
 
     [SerializeField]
     private string state;
     private CommandManager m_commandManager;
 
-    void Awake()
+    protected override void Awake()
     {
         m_commandManager = new CommandManager(this);
 
@@ -32,11 +32,8 @@ public class Agent : MonoBehaviour
     private void Start()
     {
         // TEST
-        if (agentName == AgentName.Adam)
-            m_commandManager.AddChaseCommand(AgentName.Eve);
-        else
-            m_commandManager.AddMoveToLocationCommand(TerrainManager.LocationTag.AdamHouse);
-        m_commandManager.AddSpeakCommand("Hello", 10f);
+        //m_commandManager.AddMoveToLocationCommand(TerrainManager.LocationTag.EveHouse);
+        m_commandManager.AddMoveToObjectCommand(BaseObject.ObjectTag.Desk);
 
         m_commandManager.Execute();
     }
@@ -46,30 +43,24 @@ public class Agent : MonoBehaviour
         this.state = new_state;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public string GetState()
     {
-        if (other.CompareTag("Area"))
-        {
-            var Area = other.GetComponent<LocationArea>();
-            this.Area = Area.location;
-            Area.Enter(this);
-            Debug.Log($"Area Enter : {Area.name}");
-        }
+        return this.state;
     }
 
-    private void OnTriggerExit(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Area"))
-        {
-            var Area = other.GetComponent<LocationArea>();
-            Area.Exit(this);
-            Debug.Log($"Area Exit : {Area.name}");
-        }
+        base.OnTriggerEnter(other);
+    }
+
+    protected override void OnTriggerExit(Collider other)
+    {
+        base.OnTriggerExit(other);
     }
 
     public void OnEventListener(Agent sender, string str)
     {
-        Debug.Log($"{agentName}) {sender.name} : {str}");
+        Debug.Log($"{agentName}) {sender.agentName} : {str}");
     }
 
     void OnEnable() { }

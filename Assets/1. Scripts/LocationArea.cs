@@ -6,8 +6,9 @@ public class LocationArea : MonoBehaviour
 {
     public TerrainManager.LocationTag location;
 
-    [SerializeField]
     private HashSet<Agent> agents = new();
+
+    private HashSet<BaseObject> objects = new();
 
     [SerializeField]
     private Transform position;
@@ -20,19 +21,44 @@ public class LocationArea : MonoBehaviour
         );
     }
 
-    public void Enter(Agent agent)
+    public void Enter(PositionableObject obj)
     {
-        agents.Add(agent);
+        //Debug.Log($"{obj.name}");
+        if (obj is Agent agent)
+            agents.Add(agent);
+        else if (obj is BaseObject bObj)
+            objects.Add(bObj);
     }
 
-    public void Exit(Agent agent)
+    public void Exit(PositionableObject obj)
     {
-        agents.Remove(agent);
+        if (obj is Agent agent)
+            agents.Remove(agent);
+        else if (obj is BaseObject bObj)
+            objects.Remove(bObj);
     }
 
     public HashSet<Agent> GetAgents()
     {
         return agents;
+    }
+
+    public HashSet<BaseObject> GetBaseObjects()
+    {
+        return objects;
+    }
+
+    public BaseObject GetBaseObject(BaseObject.ObjectTag tag)
+    {
+        foreach (var _obj in objects)
+        {
+            //Debug.Log($"{tag} : {_obj.objectTag}");
+            if (_obj.objectTag == tag)
+            {
+                return _obj;
+            }
+        }
+        return null;
     }
 
     public void MsgMediator(Agent sender, string str, float m_volume)
