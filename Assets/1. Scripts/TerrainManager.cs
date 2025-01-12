@@ -7,6 +7,7 @@ public static class TerrainManager
 {
     public enum LocationTag
     {
+        None,
         AdamHouse,
         Park,
         River,

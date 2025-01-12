@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Pathfinding;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class BaseObject : PositionableObject, IStateGetable
+public class BaseObject : PositionableObject, IStateGetable, IStateSetable, IInteractable
 {
     public enum ObjectTag
     {
@@ -61,6 +60,11 @@ public class BaseObject : PositionableObject, IStateGetable
         return m_objectType?.GetState();
     }
 
+    public void SetState(string new_state)
+    {
+        m_objectType?.SetState(new_state);
+    }
+
     public Transform GetTransform()
     {
         Debug.Log($"Print Transform : {transform.position}");
@@ -68,17 +72,80 @@ public class BaseObject : PositionableObject, IStateGetable
             return transform;
         return position;
     }
+
+    public void Interact(Agent agent, string content)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public abstract class ObjectType : IStateGetable
 {
-    public abstract string GetState();
+    public string state;
+    public virtual string GetState()
+    {
+        return state;
+    }
+
+    public virtual void SetState(string new_state)
+    {
+        state = new_state;
+    }
+
 }
 
 public class Bed : ObjectType
 {
     public override string GetState()
     {
-        throw new System.NotImplementedException();
+        return base.GetState();
+    }
+}
+
+public class Desk : ObjectType
+{
+    public override string GetState()
+    {
+        return base.GetState();
+    }
+}
+
+public class Chair : ObjectType
+{
+    public override string GetState()
+    {
+        return base.GetState();
+    }
+}
+
+public class Tree : ObjectType
+{
+    public override string GetState()
+    {
+        return base.GetState();
+    }
+}
+
+public class Bench : ObjectType
+{
+    public override string GetState()
+    {
+        return base.GetState();
+    }
+}
+
+public class KitchenDesk : ObjectType
+{
+    public override string GetState()
+    {
+        return base.GetState();
+    }
+}
+
+public class River : ObjectType
+{
+    public override string GetState()
+    {
+        return base.GetState();
     }
 }

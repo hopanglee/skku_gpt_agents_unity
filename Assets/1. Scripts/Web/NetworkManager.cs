@@ -7,12 +7,18 @@ using Newtonsoft.Json.Converters;
 using UnityEngine;
 
 
-public class Response
+public class AINPCResponse
 {
+    public enum CommandType{MoveToLocation, MoveToObject, Chase, Speak, ChangeState, Interact}
+    [JsonProperty("command_type")] // JSON 필드 이름
+    public CommandType Command { get; set; }
+    
+    [JsonProperty("parameter")] // 기타 데이터 필드
+    public object[] Parameter { get; set; }
 
 }
 
-public class Request
+public class AINPCRequest
 {
 
 }
@@ -28,11 +34,11 @@ public static class NetworkManager
     }
 
 
-    public static async Task<Response> Post(Request request)
+    public static async Task<AINPCResponse> AINPCPost(AINPCRequest request)
     {
         try
         {
-            return await fetcher.Post<Response>("/chat", request);
+            return await fetcher.Post<AINPCResponse>("/chat", request);
         }
         catch (Exception ex)
         {
