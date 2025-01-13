@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class CommandManager
@@ -13,38 +14,43 @@ public class CommandManager
         m_commandInvoker = new CommandInvoker();
     }
 
-    public void ResponseToCommand(AINPCResponse response)
+    // 나중에 PostForRawJson이걸로 가져옴
+    public void AddCommandFromResponseJson(string responseJson)
     {
+        var response = JsonConvert.DeserializeObject<AINPCResponse>(responseJson);
         switch (response.Command)
         {
             case AINPCResponse.CommandType.ChangeState:
-                AddStateCommand(response.Parameter[0].ToString());
+                var changeStateResponse = JsonConvert.DeserializeObject<ChangeStateResponse>(responseJson);
+                AddStateCommand(changeStateResponse.NewState);
 
                 break;
 
             case AINPCResponse.CommandType.Chase:
-                var agentName = StringToAgentName(response.Parameter[0].ToString());
-                AddChaseCommand(agentName);
+                var chaseResponse = JsonConvert.DeserializeObject<ChaseResponse>(responseJson);
+                AddChaseCommand(chaseResponse.Target);
                 break;
 
             case AINPCResponse.CommandType.Interact:
-                var objectTag = StringToObjectTag(response.Parameter[0].ToString());
-                AddInteractToObjectCommand(objectTag, response.Parameter[1].ToString());
+                var interactResponse = JsonConvert.DeserializeObject<InteractResponse>(responseJson);
+                AddInteractToObjectCommand(interactResponse.ObjectTag, interactResponse.content);
                 break;
 
             case AINPCResponse.CommandType.MoveToLocation:
-                var locationTag = StringToLocationTag(response.Parameter[0].ToString());
-                AddMoveToLocationCommand(locationTag);
+                var moveToLocationResponse = JsonConvert.DeserializeObject<MoveToLocationResponse>(responseJson);
+                AddMoveToLocationCommand(moveToLocationResponse.LocationTag);
                 break;
 
             case AINPCResponse.CommandType.MoveToObject:
-                var _objectTag = StringToObjectTag(response.Parameter[0].ToString());
-                AddMoveToObjectCommand(_objectTag);
-                
+                var moveToObjectResponse = JsonConvert.DeserializeObject<MoveToObjectResponse>(responseJson);
+                AddMoveToObjectCommand(moveToObjectResponse.ObjectTag);
+
                 break;
 
             case AINPCResponse.CommandType.Speak:
-                AddSpeakCommand(response.Parameter[0].ToString(), (float)response.Parameter[1]);
+                var speakResponse = JsonConvert.DeserializeObject<SpeakResponse>(responseJson);
+
+                AddSpeakCommand(speakResponse.Content, speakResponse.Volume);
                 break;
         }
     }
