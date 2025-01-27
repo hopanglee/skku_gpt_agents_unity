@@ -25,4 +25,9 @@ public class CommandInvoker
     {
         command.Execute();
     }
+
+    public void Clear()
+    {
+        m_commandQueue.Clear();
+    }
 }

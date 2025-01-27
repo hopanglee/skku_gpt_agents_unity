@@ -15,4 +15,5 @@ public interface IStateSetable
 public interface IInteractable
 {
     public void Interact(Agent agent, string content);
+    public void Interact(BaseObject.ObjectTag objectTag, string content);
 }
